@@ -7,6 +7,8 @@ const routes = express.Router();
 
 routes.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.getAllTours)
 
+routes.route('/tour-stats').get(tourController.getTourStats)
+
 routes
     .route('/')
     .get(tourController.getAllTours)
