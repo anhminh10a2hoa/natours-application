@@ -9,6 +9,8 @@ routes.route('/top-5-cheap').get(tourController.aliasTopTours, tourController.ge
 
 routes.route('/tour-stats').get(tourController.getTourStats)
 
+routes.route('/monthly-plan/:year').get(tourController.getMonthlyPlan)
+
 routes
     .route('/')
     .get(tourController.getAllTours)
