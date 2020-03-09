@@ -22,5 +22,6 @@ app.all('*', (req, res, next) => {
     message: `Can not find ${req.originalURL} on this server!`
   });
 });
+//TEST
 
 module.exports = app;
