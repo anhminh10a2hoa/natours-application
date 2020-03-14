@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon server.js",
-    "start:prod": "NODE_END=production nodemon server.js",
+    "start:prod": "nodemon server.js NODE_ENV=production",
     "debug": "ndb server.js"
   },
   "author": "Anh Minh",
