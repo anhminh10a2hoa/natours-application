@@ -1,8 +1,9 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-const mongoSantize = require('express-mongo-santize');
+const mongoSantize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const hpp = require('hpp');
 
 const app = express();
 const morgan = require('morgan');
@@ -33,6 +34,11 @@ app.use(mongoSantize());
 
 // Data santitization against XSS
 app.use(xss());
+
+// Prevent parameter pollution
+app.use(hpp({
+  whitelist: ['duration', 'ratingsAverage', 'ratingsQuantity', 'maxGroupSize', 'price', 'difficulty']
+}));
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
