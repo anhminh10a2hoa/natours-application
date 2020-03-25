@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema({
   name: {
@@ -74,7 +75,32 @@ const tourSchema = new mongoose.Schema({
   secretTour: {
     type: Boolean,
     default: false
-  }
+  },
+  startLocation: {
+    // GeoJSON
+    type: {
+      type: String,
+      default: 'Point',
+      enum: ['Point']
+    },
+    coordinates: [Number],
+    address: String,
+    description: String
+  },
+  location: [
+    {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+      day: Number
+    }
+  ],
+  guides: []
 }, {
   toJSON: {
     virtuals: true
@@ -95,6 +121,13 @@ tourSchema.pre('save', function (next) {
   });
   next();
 });
+
+tourSchema.pre('save', async function (next){
+  const guidesPromises = this.guides.map(async id => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises)
+
+  next();
+})
 
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
