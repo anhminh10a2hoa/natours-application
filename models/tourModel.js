@@ -152,7 +152,7 @@ tourSchema.pre(/^find/, function (next) {
     select: '-__v -createdAt'
   })
   next()
-})
+});
 
 // tourSchema.pre('findOne', function(next) {
 //   this.find({ secretTour: { $ne: true } });
