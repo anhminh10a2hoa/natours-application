@@ -85,7 +85,8 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
 });
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
-  const stats = await Tour.aggregate([{
+  const stats = await Tour.aggregate([
+    {
       $match: {
         ratingsAverage: {
           $gte: 4.5
@@ -141,14 +142,15 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
 
-  const plan = await Tour.aggregate([{
+  const plan = await Tour.aggregate([
+    {
       $unwind: '$startDates'
     },
     {
       $match: {
         startDates: {
           $gte: new Date(`${year}-01-01`),
-          $lte: new Date(`${year}-12-31`),
+          $lte: new Date(`${year}-12-31`)
         }
       }
     },

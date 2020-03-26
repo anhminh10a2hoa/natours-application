@@ -8,24 +8,24 @@ const hpp = require('hpp');
 const app = express();
 const morgan = require('morgan');
 const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController')
+const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 const reviewRouter = require('./routes/reviewRoute');
 // Set security for HTTP header
 app.use(helmet());
 
-// Development logging 
+// Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 // Limit requests from same IP
 const limiter = rateLimit({
   max: 100,
-  windowMs: 60*60*1000,
+  windowMs: 60 * 60 * 1000,
   message: 'Too many requests for this IP, please try again in an hour'
-})
-app.use("/api", limiter);
+});
+app.use('/api', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
@@ -37,9 +37,18 @@ app.use(mongoSantize());
 app.use(xss());
 
 // Prevent parameter pollution
-app.use(hpp({
-  whitelist: ['duration', 'ratingsAverage', 'ratingsQuantity', 'maxGroupSize', 'price', 'difficulty']
-}));
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsAverage',
+      'ratingsQuantity',
+      'maxGroupSize',
+      'price',
+      'difficulty'
+    ]
+  })
+);
 
 // Serving static files
 app.use(express.static(`${__dirname}/public`));
