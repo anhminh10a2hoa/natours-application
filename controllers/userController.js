@@ -70,11 +70,6 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: '500 Internal Server Error',
-    message: 'Can not find user'
-  });
-};
-
+exports.createUser = factory.createOne(User);
+exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
