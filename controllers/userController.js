@@ -56,20 +56,15 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: '500 Internal Server Error',
-    message: 'Can not find user'
-  });
-};
-
 exports.createUser = (req, res) => {
   res.status(500).json({
-    status: '500 Internal Server Error',
-    message: 'Can not find user'
+    status: 'error',
+    message: 'This route is not defined! Please use /singup instead'
   });
 };
 
-exports.createUser = factory.createOne(User);
+// Do NOT update password with this!
+// exports.createUser = factory.createOne(User);
+exports.getUser = factory.getOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
