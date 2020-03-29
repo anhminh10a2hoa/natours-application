@@ -56,20 +56,20 @@ reviewSchema.pre(/^find/, function(next) {
 });
 
 reviewSchema.statics.calcAverageRatings = async function(tourId) {
-  const stats = await this.aggregate(
-    (0)[
-      ({
-        $match: { tour: tourId }
-      },
-      {
-        group: {
-          _id: '$tour',
-          nRating: { $sum: 1 },
-          avgRating: { $avg: '$rating' }
-        }
-      })
-    ]
-  );
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourId }
+    },
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' }
+      }
+    }
+  ]);
+  console.log(stats);
+
   await Tour.findByIdAndUpdate(tourId, {
     ratingsQuantity: stats[0].nRating,
     ratingsAverage: stats[0].avgRating
