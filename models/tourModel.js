@@ -193,5 +193,4 @@ tourSchema.pre('aggregrate', function(next) {
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
-
 module.exports = Tour;
