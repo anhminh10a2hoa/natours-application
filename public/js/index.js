@@ -10,6 +10,7 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-settings');
+const inputForm = document.querySelector('.form__upload');
 //DELEGATION
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
@@ -24,6 +25,19 @@ if (loginForm) {
   });
 }
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
+// image preview
+if (inputForm) {
+  inputForm.addEventListener('change', () => {
+    const file = document.getElementById('photo').files[0];
+    const reader = new FileReader();
+
+    reader.onload = e => {
+      document.querySelector('.form__user-photo').src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
 if (userDataForm) {
   userDataForm.addEventListener('submit', e => {
@@ -31,6 +45,7 @@ if (userDataForm) {
     const form = new FormData();
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
     updateSettings(form, 'data');
   });
 }

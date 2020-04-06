@@ -8494,7 +8494,12 @@ var logout = /*#__PURE__*/function () {
 
           case 3:
             res = _context2.sent;
-            if (res.data.status === 'success') location.reload(true); // reload the server
+
+            if (res.data.status === 'success') {
+              location.replace('/');
+              location.replace('/');
+            } // reload the server
+
 
             _context2.next = 10;
             break;
@@ -8558,6 +8563,9 @@ var updateSettings = /*#__PURE__*/function () {
 
             if (res.data.status === 'success') {
               (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully"));
+              window.setTimeout(function () {
+                location.reload();
+              }, 1000);
             }
 
             _context.next = 11;
@@ -8856,7 +8864,8 @@ var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
 var logOutBtn = document.querySelector('.nav__el--logout');
 var userDataForm = document.querySelector('.form-user-data');
-var userPasswordForm = document.querySelector('.form-user-settings'); //DELEGATION
+var userPasswordForm = document.querySelector('.form-user-settings');
+var inputForm = document.querySelector('.form__upload'); //DELEGATION
 
 if (mapBox) {
   var locations = JSON.parse(mapBox.dataset.locations);
@@ -8872,17 +8881,29 @@ if (loginForm) {
   });
 }
 
-if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);
+if (logOutBtn) logOutBtn.addEventListener('click', _login.logout); // image preview
+
+if (inputForm) {
+  inputForm.addEventListener('change', function () {
+    var file = document.getElementById('photo').files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      document.querySelector('.form__user-photo').src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
 if (userDataForm) {
   userDataForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    (0, _updateSettings.updateSettings)(form, 'data');
   });
 }
 
@@ -8953,7 +8974,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56345" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59885" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
