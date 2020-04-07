@@ -31,18 +31,18 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`public/img/users/${req.body.imageCover}`);
+    .toFile(`public/img/tours/${req.body.imageCover}`);
 
   // Images
   req.body.images = [];
-  Promise.all(
+  await Promise.all(
     req.files.images.map(async (file, index) => {
       const filename = `tour-${req.params.id}-${Date.now()}-${index + 1}.jpeg`;
       await sharp(file.buffer)
         .resize(2000, 1333)
         .toFormat('jpeg')
         .jpeg({ quality: 90 })
-        .toFile(`public/img/users/${req.body.imageCover}`);
+        .toFile(`public/img/tours/${filename}`);
 
       req.body.images.push(filename);
     })
