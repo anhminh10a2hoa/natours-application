@@ -5,7 +5,7 @@ const htmlToText = require('html-to-text');
 
 module.exports = class Email {
   constructor(user, url) {
-    this.to = user;
+    this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
     this.from = `Anh Minh <${process.env.EMAIL_FROM}>`;
@@ -13,8 +13,14 @@ module.exports = class Email {
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
-      //Sendgrid
-      return 1;
+      // Sendgrid
+      return nodemailer.createTransport({
+        service: 'SendGrid',
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD
+        }
+      });
     }
     return nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
@@ -30,7 +36,7 @@ module.exports = class Email {
   async send(template, subject) {
     // 1) Render HTML based on the pug template
     const html = pug.renderFile(
-      `${__dirname}/../vỉews/emails/${template}.pug`,
+      `${__dirname}/../views/emails/${template}.pug`,
       {
         firstName: this.firstName,
         url: this.url,
@@ -52,5 +58,12 @@ module.exports = class Email {
 
   async sendWelcome() {
     await this.send('welcome', 'Welcome to the Natours Family!');
+  }
+
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'This password reset token (Valid for only 10 minutes)'
+    );
   }
 };
