@@ -15,6 +15,7 @@ const tourRouter = require('./routes/tourRoute');
 const userRouter = require('./routes/userRoute');
 const reviewRouter = require('./routes/reviewRoute');
 const viewRouter = require('./routes/viewRoute');
+const bookingRouter = require('./routes/bookingRoute');
 
 // Set template pug
 app.set('view engine', 'pug');
@@ -79,6 +80,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   // const err = new Error(`Can not find ${req.originalUrl} on this server!`);
